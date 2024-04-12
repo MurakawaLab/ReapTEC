@@ -32,5 +32,5 @@ This script is adapted from the FANTOM5 consortium (https://github.com/andersson
 (enhancers/scripts/fixed_bidir_enhancers_10bp.sh).
 
 •	(Optional) TSS_peak_based_analysis_log: This log file provides instructions to perform TSS–based single-cell analysis. 
-The 5′ ends of transcripts are counted at the single-cell level for each TSS peak.
+The 5′-ends of transcripts are counted at the single-cell level for each TSS peak.
 
