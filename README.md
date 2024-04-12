@@ -20,9 +20,9 @@ FANTOM5 promoters and enhancers, and to create mask file used during enhancer id
 
 •	STARsolo_SoftclipG_221224.sh: This script extracts reads starting with an unencoded G (at the 5′-end).
 
-•	STARsolo_Cell_barcode_TSS_bed_20221123.sh: This script identifies 5′-end TSS from STARsolo-aligned umi-tools-deduplicated 5′ scRNA-seq data.
+•	STARsolo_Cell_barcode_CTSS_bed_20221123.sh: This script identifies 5′-end TSS from STARsolo-aligned umi-tools-deduplicated 5′ scRNA-seq data.
 
-•	STARsolo_Counts_TSS_bed_CPM_bigwig_240119.sh: This script counts 5′-end of reads that map to known promoters and enhancers. 
+•	STARsolo_Counts_CTSS_bed_CPM_bigwig_240119.sh: This script counts 5′-end of reads that map to known promoters and enhancers. 
 This script also provides normalized BigWig files for visualization on IGV, UCSC.
 
 •	fixed_bidir_enhancers_10bp.sh: This script identifies bidirectionally transcribed enhancers. 
