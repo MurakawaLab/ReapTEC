@@ -2,14 +2,13 @@
 ### April 29th 2023
 ### Contact: Murakawa lab at RIKEN Yokohama and Kyoto University
 ### Written by: Raku Son; raku.son@riken.jp;
-### Reviewed by: 
-  Akiko Oguchi; akiko.oguchi@riken.jp;  
+### Reviewed by:
+  Akiko Oguchi; akiko.oguchi@riken.jp;
   Sho Sekito; sekito.shou.25u@st.kyoto-u.ac.jp
   Shruti Bhagat; bhagat.shruti.53p@st.kyoto-u.ac.jp
-  Yasuhiro Murakawa; yasuhiro.murakawa@riken.jp, murakawa.yasuhiro.0r@kyoto-u.ac.jp 
+  Yasuhiro Murakawa; yasuhiro.murakawa@riken.jp, murakawa.yasuhiro.0r@kyoto-u.ac.jp
 
-### The following log file uses downsampled test files (Test_S1_L001_R1_001.fastq.gz, Test_S1_L001_R2_001.fastq.gz, 23,508,149 reads for each)
-### Test files were downsampled from SRR12018267 fastq files (human memory activated T cells) to 5% by seqkit
+### The following log file uses test files named as Test_S1_L001_R1_001.fastq.gz and Test_S1_L001_R2_001.fastq.gz
 
 ### Requirements
 Cellranger v7.0.0 (https://support.10xgenomics.com/single-cell-gene-expression/software/downloads/latest)
@@ -18,7 +17,7 @@ umi-tools v1.1.2 (https://github.com/CGATOxford/UMI-tools/releases/tag/1.1.2)
 samtools v1.15.1 (http://www.htslib.org/)
 bedtools v2.30.0 (https://github.com/arq5x/bedtools2)
 
-### 0) Fastq files are in the working directory 
+### 0) Fastq files are in the working directory
 ls
 ### Test_S1_L001_R1_001.fastq.gz  Test_S1_L001_R2_001.fastq.gz
 \
@@ -34,35 +33,35 @@ ls
 ### Although STARsolo also filters cell barcodes and produces count data, the result usually contains less #cells compared with Cellranger, which sometimes misses specific clusters
 
 export PATH=~/cellranger-7.0.0:$PATH
-for infile in *_fastq; 
-do base=$(basename ${infile} _fastq); 
+for infile in *_fastq;
+do base=$(basename ${infile} _fastq);
 cellranger count --id=${base}_Cellranger \
 --fastqs=${infile} \
 --transcriptome=/local/home/ubuntu/refdata-gex-GRCh38-2020-A \
---localmem=256; 
+--localmem=256;
 done
 
-### Prepare whitelist of cell barcodes 
+### Prepare whitelist of cell barcodes
 mkdir whitelists
-for infile in *_fastq; 
-do base=$(basename ${infile} _fastq); 
+for infile in *_fastq;
+do base=$(basename ${infile} _fastq);
 zcat ${base}_Cellranger/outs/filtered_feature_bc_matrix/barcodes.tsv.gz | sed -e 's/-1//g' > whitelists/${base}_whitelist.txt;
 done
 
 ### 2) STAR mapping
 ### Without --limitBAMsortRAM option, STAR sometimes outputs error as
-### EXITING because of fatal ERROR: not enough memory for BAM sorting: 
+### EXITING because of fatal ERROR: not enough memory for BAM sorting:
 ### SOLUTION: re-run STAR with at least --limitBAMsortRAM (some specific number)
 ### 60000000000 is usually fine but in some deeply sequenced samples, 120000000000 was required
 
 ### Usually, allowing to open a large number of files is needed
-### Otherwise, STAR will outputs error as 
+### Otherwise, STAR will outputs error as
 ### BAMoutput.cpp:27:BAMoutput: exiting because of *OUTPUT FILE* error: could not create output file Test_S1_L001_STARsolo/Test_S1_L001__STARtmp//BAMsort/19/45
 ### SOLUTION: check that the path exists and you have write permission for this file. Also check ulimit -n and increase it to allow more open files.
 ulimit -n 10000
 
-for infile in *_fastq; 
-do base=$(basename ${infile} _fastq); 
+for infile in *_fastq;
+do base=$(basename ${infile} _fastq);
 STAR \
 --runThreadN 32 \
 --genomeDir /local/home/ubuntu/ref/reference_20220827/human_GRCh38_gencodev41/GRCh38_index/ \
@@ -91,7 +90,7 @@ done
 ### Oct 22 10:47:43 ..... started sorting BAM
 ### Oct 22 10:49:11 ..... finished successfully
 
-### 3) Extract reads that start with unencoded-G 
+### 3) Extract reads that start with unencoded-G
 ### Extract uniquely mapped reads (Read1 only)
 for infile in *_fastq;
 do base=$(basename ${infile} _fastq);
@@ -109,16 +108,16 @@ cd ..
 
 ### 4) Deduplicate by umi-tools
 ### Prepare index files for umi-tools
-for infile in *_fastq; 
-do base=$(basename ${infile} _fastq); 
+for infile in *_fastq;
+do base=$(basename ${infile} _fastq);
 samtools index -@ 32 Uniquely_mapped_R1/SoftclipG_${base}_Aligned.sortedByCoord.out_unique_R1.bam;
 done
 
 ### Umi-tools is used without --output-stats option since it sometimes produces error due to larger memory usage
 ### Since umi-tools only uses single-thread, this process is recommended to be parallelized as needed to save the total process time for multiple samples
 
-for infile in *_fastq; 
-do base=$(basename ${infile} _fastq); 
+for infile in *_fastq;
+do base=$(basename ${infile} _fastq);
 umi_tools dedup --per-cell \
 -I Uniquely_mapped_R1/SoftclipG_${base}_Aligned.sortedByCoord.out_unique_R1.bam \
 --extract-umi-method=tag --umi-tag=UR --cell-tag=CR \
@@ -128,13 +127,13 @@ done
 ### 5) Filter by valid cell barcodes
 ### Modify whitelist to fit samtools input
 mkdir cell_barcodes
-for infile in *_fastq; 
-do base=$(basename ${infile} _fastq); 
+for infile in *_fastq;
+do base=$(basename ${infile} _fastq);
 awk '{print "CB:Z:"$1}' whitelists/${base}_whitelist.txt > cell_barcodes/${base}_cell_barcode.txt;
 done
 
-for infile in *_fastq; 
-do base=$(basename ${infile} _fastq); 
+for infile in *_fastq;
+do base=$(basename ${infile} _fastq);
 cd Uniquely_mapped_R1/
 samtools view -@ 32 -H SoftclipG_${base}_Aligned.sortedByCoord.out_unique_deduplicated_UR_CR.bam > SAM_header
 samtools view -@ 32 SoftclipG_${base}_Aligned.sortedByCoord.out_unique_deduplicated_UR_CR.bam | LC_ALL=C grep -F -f ../cell_barcodes/${base}_cell_barcode.txt > filtered_SAM_body
@@ -153,7 +152,7 @@ mv Uniquely_mapped_R1/SoftclipG_*_Aligned.sortedByCoord.out_unique_deduplicated_
 cd  SoftclipG_deduplicated_filtered_bam/
 
 ### Extract cell barcodes from softclipG bam file in the same order as in bam files
-for infile in *bam; 
+for infile in *bam;
  do
    base=$(basename ${infile} .bam)
    samtools view -@ 32 ${infile} \
@@ -185,18 +184,16 @@ bash ../STARsolo_Counts_CTSS_bed_CPM_bigwig_240119.sh \
 mkdir ../enhancer_call
 
 ### Prepare path of CTSS,bed files and perform enhancer call
-for infile in *.CTSS.fwd.rev.cell.barcode.bed; 
+for infile in *.CTSS.fwd.rev.cell.barcode.bed;
 do base=$(basename ${infile} .CTSS.fwd.rev.cell.barcode.bed);
 find `pwd` -name ${infile} > ../enhancer_call/bedlist_${base}.txt;
 ../enhancers/scripts/fixed_bidir_enhancers_10bp \
 -f ../enhancer_call/bedlist_${base}.txt \
 -m ~/ref/reference_20220827/human_GRCh38_gencodev41/gencodev41_masking_exceptlncRNA/Noheader_gencode.v41.chr.gene.transcript.nonlncRNA600.mask.6.bed \
--o ../enhancer_call/enhancercall_${base}/; 
+-o ../enhancer_call/enhancercall_${base}/;
 done
 
-cd ../enhancer_call/enhancercall_SoftclipG_Test_S1_L001_Aligned.sortedByCoord.out_unique_deduplicated_UR_CR_filtered 
-wc -l enhancers.bed 
-### ~ 1520 enhancers.bed
+cd ../enhancer_call/enhancercall_SoftclipG_Test_S1_L001_Aligned.sortedByCoord.out_unique_deduplicated_UR_CR_filtered
 cd ..
 cd ..
 
@@ -214,9 +211,7 @@ find `pwd` -name SoftclipG_Test_S1_L001_Aligned.sortedByCoord.out_unique_dedupli
 ../enhancers/scripts/fixed_bidir_enhancers_10bp -f bedlist_cluster0.txt -m ~/ref/reference_20220827/human_GRCh38_gencodev41/gencodev41_masking_exceptlncRNA/Noheader_gencode.v41.chr.gene.transcript.nonlncRNA600.mask.6.bed -o enhancer_call_cluster0
 
 cd enhancer_call_cluster0/
-wc -l enhancers.bed
-### ~330 enhancers.bed
- 
+
 ### Compress bed files when the analysis is completed
 cd ..
 pigz -p 32 SoftclipG_deduplicated_filtered_bam/*.CTSS.fwd.rev.cell.barcode.bed
