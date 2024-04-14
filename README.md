@@ -34,3 +34,4 @@ This script is adapted from the FANTOM5 consortium (https://github.com/andersson
 •	(Optional) TSS_peak_based_analysis_log: This log file provides instructions to perform TSS–based single-cell analysis. 
 The 5′ ends of transcripts are counted at the single-cell level for each TSS peak.
 
+Related data is deposited here https://doi.org/10.5061/dryad.gtht76hv9 and described in the README_Dryad_for_github_240414 file. 
