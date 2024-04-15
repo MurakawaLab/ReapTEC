@@ -1,6 +1,4 @@
-README: 5' scRNA-seq datasets
-
-
+README: 5′ scRNA-seq datasets
 https://doi.org/10.5061/dryad.gtht76hv9
 
 Description of the data and file structure
