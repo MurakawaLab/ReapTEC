@@ -3,7 +3,7 @@
 This repository provides scripts to run the ReapTEC (read-level pre-filtering and transcribed enhancer call) pipeline. 
 By leveraging a unique “cap signature” derived from the 5′ end of a transcript, ReapTEC simultaneously profiles 
 gene expression and enhancer activity at nucleotide resolution using 5′-end single-cell RNA-sequencing (5′ scRNA-seq).
-The flow of analysis and a brief description of the scripts is provided below. The details are described in the STARsolo_ReapTEC_logfile.
+The flow of analysis and a brief description of the scripts are provided below. The details are described in the STARsolo_ReapTEC_logfile.
 
 
 <img width="1539" alt="Screenshot 2024-04-12 at 12 08 03" src="https://github.com/MurakawaLab/ReapTEC/assets/23185260/efd00e63-e106-4d2a-b249-832400d132a2">
@@ -31,7 +31,7 @@ This script also provides normalized BigWig files for visualization on IGV, UCSC
 This script is adapted from the FANTOM5 consortium (https://github.com/anderssonrobin/enhancers) with minor modifications 
 (enhancers/scripts/fixed_bidir_enhancers_10bp.sh).
 
-•	(Optional) TSS_peak_based_analysis_log: This log file provides instructions to perform TSS–based single-cell analysis. 
+•	(Optional) TSS_peak_based_analysis_log: This log file provides instructions to perform TSS-based single-cell analysis. 
 The 5′ ends of transcripts are counted at the single-cell level for each TSS peak.
 
 Related data is deposited here https://doi.org/10.5061/dryad.gtht76hv9 and described in the README_Dryad_for_github_April15_2024 file. 
