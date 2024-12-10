@@ -4,6 +4,7 @@ This repository provides scripts to run the ReapTEC (read-level pre-filtering an
 By leveraging a unique “cap signature” derived from the 5′ end of a transcript, ReapTEC simultaneously profiles 
 gene expression and enhancer activity at nucleotide resolution using 5′-end single-cell RNA-sequencing (5′ scRNA-seq).
 The flow of analysis and a brief description of the scripts are provided below. The details are described in the STARsolo_ReapTEC_logfile.
+All scripts are in the bin directory, please check the individual scripts for detailed usage. A brief description is provided below:
 
 
 <img width="1539" alt="Screenshot 2024-04-12 at 12 08 03" src="https://github.com/MurakawaLab/ReapTEC/assets/23185260/efd00e63-e106-4d2a-b249-832400d132a2">
