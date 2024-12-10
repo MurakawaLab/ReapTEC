@@ -16,7 +16,7 @@ The input for ReapTEC is 10x Genomics Chromium paired-end 5′ scRNA-seq fastq f
 Read 1 needs to be sequenced longer than conventional 26 bp to obtain transcription start sites (TSSs) 
 at the 5′ end of transcripts (e.g. we performed 2 × 150 bp paired-end sequencing).
 
-•	Promoter_Enhancer_Download_logFile: This log file provides instructions to obtains reference files, 
+•	Promoter_Enhancer_Download_logFile: This log file provides instructions to obtain reference files, 
 FANTOM5 promoters and enhancers, and to create mask file used during enhancer identification.
 
 •	STARsolo_STARindex_GENCODE41_PRI_221224_logFile: This log file provides instructions to create STAR index using GENCODE gene model.
