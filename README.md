@@ -43,10 +43,12 @@ Related data is deposited here https://doi.org/10.5061/dryad.gtht76hv9 and descr
 When using ReapTEC for 5′ GEM-X, please change the following parts as shown below.
 
 **For STAR mapping:**
+```bash
 --soloUMIstart 17 --soloUMIlen 12   #← change "12"
 --clip5pNbases 41 0                #← change "41"
 
 **For softclipG:**
+```awk
 BASE = substr($10, 42, 1);        # ← change "42"
 if ($6 ~ /^42S[0-9]/ && BASE == "G") {print $0} \　#← change "42"
 ALT = substr($10, length($10)-41, 1); #← change "41"
