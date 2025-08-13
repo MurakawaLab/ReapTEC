@@ -38,3 +38,16 @@ The 5′ ends of transcripts are counted at the single-cell level for each TSS p
 Related data is deposited here https://doi.org/10.5061/dryad.gtht76hv9 and described in the README_Dryad_for_github_April15_2024 file. 
 
 #### Note: The ReapTEC scripts are applicable to data from Next GEM versions. Our team is currently testing whether ReapTEC can be applied to GEM-X data as well.
+
+#### Note: 
+When using ReapTEC for 5′ GEM-X, please change the following parts as shown below.
+
+For STAR mapping:
+--soloUMIstart 17 --soloUMIlen 12   ← change "12"
+--clip5pNbases 41 0                ← change "41"
+
+For softclipG:
+BASE = substr($10, 42, 1);         ← change "42"
+if ($6 ~ /^42S[0-9]/ && BASE == "G") {print $0} \　← change "42"
+ALT = substr($10, length($10)-41, 1); ← change "41"
+if ($6 ~ /[0-9]M42S$/ && ALT == "C") {print $0} \ ← change "42"
